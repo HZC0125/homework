@@ -39,17 +39,25 @@ enum SortKind{
     col32    =   0x00000001<<31,        //!< 第32列
 };
 }
+typedef struct{
 
+    QStringList stu_data;
+
+} studData;
 
 typedef struct{
     QString stu_num="";
         QString name="";
-        qint64 subject1;
-        qint64 subject2;
-        qint64 subject3;// 请补全结构定义
+
+        // 请补全结构定义
 } studData;
 
 QDebug operator<< (QDebug d, const studData &data) {
+   for(int i=0;i<stu_data.size();i++)
+    {
+       d<<stu_data.at(i);
+    }
+   qDebug()<<"";
     // 请补全运算符重载函数，使其可以直接输出studData结构
     return d;
 }
@@ -69,7 +77,10 @@ bool myCmp::operator()(const studData &d1, const studData &d2)
     quint32 sortedColumn = 0x00000001<<currentColumn;
     switch (sortedColumn) {
     case SK::col01:
-    // ...
+
+
+
+        // ...
     // 请补全运算符重载函数
     // ...
     //
@@ -83,14 +94,63 @@ class ScoreSorter
 {
 public:
     ScoreSorter(QString dataFile);
+    void readFile();
+    void doSort();
+
+    private:
+
+        QString tempfile;
+
+        QByteArray line;
+
+        QVector<studData> student;
+
+
+
     // ...
     // 请补全该类，使其实现上述要求
     // ...
 }
 
 // 请补全
-ScoreSorter::ScoreSorter(QString dataFile){
+ScoreSorter::ScoreSorter(QString dataFile)
+{
+ file_open=dataFile;
+ void ScoreSorter::readFile()
+
+ {
+
+     QFile mfile(file_open);
+
+     if(!mfile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+             qDebug()<<"无法打开文件!"<<endl;
+
+        }
+
+     studData nowdata;
+
+     QString titile_t(mfile.readLine());
+
+         title = titile_t.split(" ", QString::SkipEmptyParts);
+
+     while(!mfile.atEnd()) {
+
+         QString str(mfile.readLine());
+
+         nowdata.stu_data = str.split(" ", QString::SkipEmptyParts);
+
+         if((nowdata.stu_data).last() == "\n") nowdata.stu_data.removeLast();
+
+         if(nowdata.stu_data.size()==0) continue;
+
+         data.append(nowdata);
+
+     }
+
+
 }
+
 
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -103,7 +163,13 @@ int main()
     qInstallMessageHandler(myMessageOutput);
     QString datafile = "data.txt";
 
-    // 如果排序后文件已存在，则删除之
+    QFile file("sorted_"+datafile);
+        if (file.exists())
+        {
+            file.remove();
+        }
+
+        // 如果排序后文件已存在，则删除之
     QFile f("sorted_"+datafile);
     if (f.exists()){
         f.remove();
