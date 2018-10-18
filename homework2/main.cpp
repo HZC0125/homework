@@ -180,7 +180,7 @@ ScoreSorter::ScoreSorter(QString dataFile)
 
 
 
-          QFile File("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt");
+          QFile File("F:/qthomework/homework/homework2/sorted_data.txt");
 
              //以追加方式打开
 
@@ -232,9 +232,9 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     //qInstallMessageHandler(myMessageOutput);
-    QString datafile = "F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/data.txt";
+    QString datafile = "F:/qthomework/homework/homework2/data.txt";
 
-    QFile file("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt"+datafile);
+    QFile file("F:/qthomework/homework/homework2/sorted_data.txt"+datafile);
         if (file.exists())
         {
             file.remove();
