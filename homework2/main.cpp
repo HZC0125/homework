@@ -180,25 +180,25 @@ ScoreSorter::ScoreSorter(QString dataFile)
 
 
 
-          QFile mfile("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt"+file_open);
+          QFile File("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt");
 
              //以追加方式打开
 
-             mfile.open(QIODevice::ReadWrite | QIODevice::Append);
+             File.open(QIODevice::ReadWrite | QIODevice::Append);
 
-             QTextStream stream(&mfile);
+             QTextStream out(&File);
 
-             stream.setCodec("UTF-8");
+             out.setCodec("UTF-8");
 
-             stream<<QString("排序后输出，当前排序第").toUtf8()<<line <<QString(" 列：").toUtf8()<<"\n";
+             out<<QString("排序后输出，当前排序第").toUtf8()<<line <<QString(" 列：").toUtf8()<<"\n";
 
              //输出表头
 
              for(int i=0;i<ldata.sdata.size();i++)
 
-                 stream<<ldata.sdata.at(i)<<"\t";
+                 out<<ldata.sdata.at(i)<<"\t";
 
-             stream<<'\n';
+             out<<'\n';
 
              //输出数据
 
@@ -210,15 +210,15 @@ ScoreSorter::ScoreSorter(QString dataFile)
 
                  {
 
-                     stream<<tdata.at(i).sdata.at(j)<<"\t"<<"\t";
+                     out<<tdata.at(i).sdata.at(j)<<"\t"<<"\t";
 
                  }
 
-                 stream<<"\n";
+                 out<<"\n";
 
              }
 
-             mfile.close();
+             File.close();
       }
 
 //void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
