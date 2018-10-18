@@ -3,7 +3,7 @@
 #include <QFile>
 #include <QCoreApplication>
 #include<QList>
-
+#include <QVector>
 namespace SK
 {
 enum SortKind
@@ -97,16 +97,16 @@ public:
     ScoreSorter(QString dataFile);//定义ScoreSorter构造函数
     void readFile();
     void doSort();
-
+    void output(quint8 line);
     private:
 
         QString file_open;
 
         QStringList title;
 
-        QList<studData> data;
+        QList<studData> tdata;
 
-
+        studData ldata;
 
     // ...
     // 请补全该类，使其实现上述要求
@@ -127,10 +127,10 @@ ScoreSorter::ScoreSorter(QString dataFile)
      if(!File.open(QIODevice::ReadOnly | QIODevice::Text))
      {
 
-             qDebug()<<"无法打开文件";
+             qDebug()<<"无法打开文件"<<endl;
      }
 
-     studData nowdata;
+
 
      QString titile_t(File.readLine());
 
@@ -141,13 +141,13 @@ ScoreSorter::ScoreSorter(QString dataFile)
 
          QString str(File.readLine());
 
-         nowdata.sdata = str.split(" ", QString::SkipEmptyParts);
+         ldata.sdata = str.split(" ", QString::SkipEmptyParts);
 
-         if((nowdata.sdata).last() == "\n") nowdata.sdata.removeLast();
+         if((ldata.sdata).last() == "\n") ldata.sdata.removeLast();
 
-         if(nowdata.sdata.size()==0) continue;
+         if(ldata.sdata.size()==0) continue;
 
-         data.append(nowdata);
+         tdata.append(ldata);
 
      }
      File.close();
@@ -156,36 +156,85 @@ ScoreSorter::ScoreSorter(QString dataFile)
 
 
  }
-      void ScoreSorter::doSort()         //排序输出函数
+      void ScoreSorter::doSort() //排序输出函数
       {
-          for(int i=0;i<data.size();i++)
+          for(int i=0;i<ldata.sdata.size();i++)
           {
               myCmp cmp(i-1);
-              std::sort(data.begin(),data.end(),cmp);
-              qDebug().noquote().nospace()<<"排序之后输出数据，目前排序第"<<i<<"列："
+              std::sort(tdata.begin(),tdata.end(),cmp);
+              qDebug().noquote().nospace()<<"排序之后输出数据，目前排序第"<<i<<"列：";
               qDebug()<<title;
-              for(int i=0;i<data.size();i++)
-              {
-              qDebug()<<data.at(i);
-              }
+              for(int i=0;i<tdata.size();i++)
+
+              qDebug()<<tdata.at(i);
+
               qDebug()<<"-------------------------------------------------------\n";
+              output(i);
 
            }
       }
 
+      void ScoreSorter::output(quint8 line)    // 输出信息至文件中
 
+      {
+
+
+
+          QFile mfile("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt"+file_open);
+
+             //以追加方式打开
+
+             mfile.open(QIODevice::ReadWrite | QIODevice::Append);
+
+             QTextStream stream(&mfile);
+
+             stream.setCodec("UTF-8");
+
+             stream<<QString("排序后输出，当前排序第").toUtf8()<<line <<QString(" 列：").toUtf8()<<"\n";
+
+             //输出表头
+
+             for(int i=0;i<ldata.sdata.size();i++)
+
+                 stream<<ldata.sdata.at(i)<<"\t";
+
+             stream<<'\n';
+
+             //输出数据
+
+             for(int i=0;i<tdata.count();i++)
+
+             {
+
+                 for(int j=0;j<ldata.sdata.count()-1;j++)
+
+                 {
+
+                     stream<<tdata.at(i).sdata.at(j)<<"\t"<<"\t";
+
+                 }
+
+                 stream<<"\n";
+
+             }
+
+             mfile.close();
+      }
 
 //void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 //{
     // 自定义qDebug
 //}
 
-int main()
+int main(int argc, char *argv[])
 {
-    //qInstallMessageHandler(myMessageOutput);
-    QString datafile = "F:/qthomework/homework/homework2/data.txt";
 
-    QFile file("sorted_"+datafile);
+    QCoreApplication a(argc, argv);
+
+    //qInstallMessageHandler(myMessageOutput);
+    QString datafile = "F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/data.txt";
+
+    QFile file("F:/qthomework/homework/build-homework2-Desktop_Qt_5_9_3_MinGW_32bit-Debug/debug/sorted_data.txt"+datafile);
         if (file.exists())
         {
             file.remove();
