@@ -19,6 +19,7 @@ public:
     ST::ShapeType shapeType();
     void setDrawnText(QString text);
 
+     QString FileName="C:/Users/admin/Desktop";
 
 protected:
     void mousePressEvent (QMouseEvent *e);

@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QDebug>
-
+#include <QFileDialog>
 CenterFrame::CenterFrame(QWidget *parent) : QFrame(parent)
 {
     // 创建用户命令区
@@ -145,14 +145,11 @@ void CenterFrame::createUserCommandArea()
          btnPicture->setCheckable(true);
          btnPicture->setIconSize(p.size());
          p.fill(BACKGROUND_COLOR);
-         QImage image(":/pic2");
+         QImage image("C:/Users/admin/Desktop/pic1");
          QRect targetRect(0,0,p.size().width(),p.size().height());
          QRect sourceRect =image.rect();
-
          painter.drawImage(targetRect,image,sourceRect);
          btnPicture->setIcon(QIcon(p));
-
-
          connect(btnPicture,&QPushButton::clicked,this,&CenterFrame::on_btnPictureClicked);
 
 
@@ -359,11 +356,12 @@ void CenterFrame::createUserCommandArea()
 
  void CenterFrame::on_btnPictureClicked()
  {
+
+
      if(btnPicture->isChecked())
      {
          drawWidget->setShapeType(ST::Pic);
          drawWidget->drawpic();
-
          updateButtonStatus();
      }
      else
