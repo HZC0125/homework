@@ -8,8 +8,8 @@
 #include <QToolButton>
 #include <QDebug>
 #include <QLayout>
-
-
+#include <QPainter>
+#include <QFileDialog>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -73,6 +73,17 @@ void MainWindow::createToolBar ()
     clearBtn->setText (tr("清除"));
     clearBtn->setToolTip(tr("清除当前画板"));
     connect (clearBtn, &QToolButton::clicked, centerFrame, &CenterFrame::clearPaint);
+
+    //创建图片
+
+    pixmap.fill(BACKGROUND_COLOR);
+    QPainter painter(&pixmap);
+    QImage image(":/pic2");
+    QRect targetRect(0,0,20,20);
+    QRect sourceRect=image.rect();
+    painter.drawImage(targetRect,image,sourceRect);
+    pictureBtn=new QToolButton;
+    pictureBtn->setIcon(QIcon(pixmap));
 
 
     // 向工具栏上添加各个控件

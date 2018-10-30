@@ -138,6 +138,24 @@ void CenterFrame::createUserCommandArea()
      connect(btnText,&QPushButton::clicked,
              this,&CenterFrame::on_btnTextClicked);
 
+     //图片按钮
+
+         btnPicture =new QPushButton(group);
+         btnPicture->setToolTip("绘制图片");
+         btnPicture->setCheckable(true);
+         btnPicture->setIconSize(p.size());
+         p.fill(BACKGROUND_COLOR);
+         QImage image(":/pic2");
+         QRect targetRect(0,0,p.size().width(),p.size().height());
+         QRect sourceRect =image.rect();
+
+         painter.drawImage(targetRect,image,sourceRect);
+         btnPicture->setIcon(QIcon(p));
+
+
+         connect(btnPicture,&QPushButton::clicked,this,&CenterFrame::on_btnPictureClicked);
+
+
      // 选项Group布局
      QGridLayout *gridLayout = new QGridLayout();
      gridLayout->addWidget(btnRect,0,0);
@@ -146,6 +164,7 @@ void CenterFrame::createUserCommandArea()
      gridLayout->addWidget(btnLine,1,1);
      gridLayout->addWidget(btnText,2,0);
      gridLayout->addWidget(btnDiamond,2,1);
+     gridLayout->addWidget(btnPicture,3,0);
      gridLayout->setMargin(3);
      gridLayout->setSpacing(3);
      group->setLayout(gridLayout);
@@ -336,4 +355,20 @@ void CenterFrame::createUserCommandArea()
  void CenterFrame::on_edtTextEdited(const QString &text)
  {
      drawWidget->setDrawnText(text);
+ }
+
+ void CenterFrame::on_btnPictureClicked()
+ {
+     if(btnPicture->isChecked())
+     {
+         drawWidget->setShapeType(ST::Pic);
+         drawWidget->drawpic();
+
+         updateButtonStatus();
+     }
+     else
+     {
+         drawWidget->setShapeType(ST::None);
+     }
+
  }
